@@ -1,6 +1,13 @@
-.venv/
-.idea/
 __pycache__/
 *.pyc
+
 outputs/
 crashes/
+hangs/
+corpus/
+
+coverage_tmp.json
+temp_minimized.bin
+
+.idea/
+.vscode/
