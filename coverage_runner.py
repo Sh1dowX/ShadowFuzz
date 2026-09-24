@@ -17,9 +17,6 @@ def main():
     input_file = sys.argv[2]
     coverage_output = sys.argv[3] if len(sys.argv) > 3 else "coverage_tmp.json"
 
-    # runpy.run_path устанавливает co_filename ровно в тот путь, который
-    # ему передали (например "target.py"), а НЕ в resolved-абсолютный путь.
-    # Поэтому сравниваем как есть, без .resolve().
     covered_lines = set()
 
     def trace_calls(frame, event, arg):
