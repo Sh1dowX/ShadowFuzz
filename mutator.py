@@ -32,7 +32,7 @@ def insert_random_byte(data):
     position = random.randrange(len(mutated) + 1)
     new_value = random.randint(0, 255)
 
-    mutated.insert(position, new_value)  # Вставляет в mutated новый байт
+    mutated.insert(position, new_value) 
 
     details = (
         f"Position: {position}\n"
@@ -66,7 +66,7 @@ def flip_random_bit(data):
     bit_position = random.randint(0, 7)
 
     old_value = mutated[position]
-    mutated[position] ^= (1 << bit_position)   # 00000001 -> 000010000 move left ( bit positions )
+    mutated[position] ^= (1 << bit_position)  
     new_value = mutated[position]
 
     details = (
@@ -110,7 +110,7 @@ def duplicate_block(data):
     start_position = random.randrange(len(mutated))
 
     available_length = len(mutated) - start_position
-    max_block_length = min(available_length, 64)   # Ограничиваем размер input
+    max_block_length = min(available_length, 64) 
 
     block_length = random.randint(1, max_block_length)
 
@@ -134,12 +134,12 @@ def overwrite_block(data):
     if len(mutated) == 0:
         return bytes(mutated), "File was empty"
 
-    start_position = random.randrange(len(mutated))         #  Ищем начало
-    available_length = len(mutated) - start_position        #
-    max_block_length = min(available_length, 64)            #  Ищем разрешенный максимум для блока
-    block_length = random.randint(1, max_block_length)   #  Ищем длину
+    start_position = random.randrange(len(mutated))        
+    available_length = len(mutated) - start_position        
+    max_block_length = min(available_length, 64)         
+    block_length = random.randint(1, max_block_length)  
     #
-    block = mutated[start_position:start_position + block_length]  # создаем Block который мы копируем
+    block = mutated[start_position:start_position + block_length] 
 
     new_bytes = random.randbytes(block_length)
 
@@ -193,10 +193,9 @@ def reverse_block(data):
     start_position = random.randrange(
         len(mutated) - block_length + 1)
     #
-    block = mutated[start_position:start_position + block_length]  # создаем Block который мы копируем
+    block = mutated[start_position:start_position + block_length] 
 
-    reversed_block = bytes(reversed(block)) # Так как reversed(bytes) не возвращает bytes, а ввозвращает объект-итератор лучше сначало перевернуть блок
-
+    reversed_block = bytes(reversed(block)) 
     mutated[start_position:start_position + block_length] = reversed_block
 
     details = (
@@ -213,12 +212,12 @@ def set_block_value(data):
     if len(mutated) == 0:
         return  bytes(mutated), "File was empty"
 
-    start_position = random.randrange(len(mutated))  #
-    available_length = len(mutated) - start_position  #
-    max_block_length = min(available_length, 64)  #
-    block_length = random.randint(1, max_block_length)  #
-    #
-    block = mutated[start_position:start_position + block_length]  # создаем Block который мы копируем
+    start_position = random.randrange(len(mutated))  
+    available_length = len(mutated) - start_position  
+    max_block_length = min(available_length, 64)  
+    block_length = random.randint(1, max_block_length)  
+    
+    block = mutated[start_position:start_position + block_length]  
 
     random_byte = random.randbytes(1)
     random_byte = block_length * random_byte
@@ -305,7 +304,7 @@ def shrink_file(data):
 
     start_position = random.randrange(len(mutated))
     available_length = len(mutated) - start_position
-    max_block_length = min(available_length, 64)  # Ограничиваем размер input
+    max_block_length = min(available_length, 64)  
     block_length = random.randint(1, max_block_length)
     block = mutated[
         start_position:start_position + block_length
@@ -422,7 +421,7 @@ def copy_block_from_seed(data, second_seed_data):
         f"New size: {len(mutated)}"
     )
     return bytes(mutated), details
-# ===========
+# ==========================
 
 
 def mutate(data, second_seed_data=None):
@@ -499,8 +498,8 @@ def mutate(data, second_seed_data=None):
         choice = random.choices(
             mutation,
             weights=weights,
-            k=1 # Скок элементов ( мутации ) выбрет функция
-        )[0] # <- на выходе функция нам дает список. [0] - делает из списка строку
+            k=1 
+        )[0] 
 
         mutation_stats[choice] += 1
 
