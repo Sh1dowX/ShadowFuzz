@@ -488,10 +488,7 @@ def prune_corpus(corpus_directory,input_files,input_energy,input_hits,productive
     candidates = [f for f in corpus_files if input_hits[f] > 0]
 
     if not candidates:
-        # все corpus-файлы ещё непротестированы (hits == 0) - по efficiency
-        # выбрать некого, но corpus всё равно полон и новый input иначе
-        # никогда не сохранится. Fallback: удаляем по наименьшей energy,
-        # как в старой версии prune_corpus.
+        
         worst_file = None
         worst_energy = None
 
@@ -522,7 +519,7 @@ def prune_corpus(corpus_directory,input_files,input_energy,input_hits,productive
             worst_efficiency = efficiency
             worst_file = file
         elif efficiency == worst_efficiency and input_hits[file] > input_hits[worst_file]:
-            worst_file = file  # при равной efficiency - у кого больше hits, тот бесполезнее
+            worst_file = file 
 
     if worst_file is not None:
         worst_file.unlink()
@@ -546,7 +543,7 @@ def fuzz_iteration(
         max_corpus,
         input_hits,
         productive_hits,
-        known_coverage):   # Делает одну интерацию фаззинга
+        known_coverage):  
 
     weight = []
 
@@ -575,7 +572,7 @@ def fuzz_iteration(
 
     original_data = read_seed(selected_seed)
 
-    if selected_seed.parent.name == "seeds":  # Выводит то куда был сохранен новый интересный файл
+    if selected_seed.parent.name == "seeds": 
         print(f"Selected seed: {selected_seed.parent.name}")
         print(f"File: {selected_seed.name}")
 
@@ -603,7 +600,7 @@ def fuzz_iteration(
 
     execution_start = time.perf_counter()
     coverage_output = output_directory / "coverage_tmp.json"
-    coverage_output.unlink(missing_ok=True)  # защита от старого coverage, если прошлый запуск не успел его перезаписать
+    coverage_output.unlink(missing_ok=True) 
 
     try:
         result, covered_lines = run_target(
@@ -657,9 +654,6 @@ def fuzz_iteration(
 
         return "duplicate_hang", mutation_stats
 
-    # coverage учитываем сразу для любого завершившегося запуска (crash
-    # или нормальный) - раньше coverage от crash-запуска терялся, потому
-    # что crash-ветка делала return до расчёта new_lines.
     new_lines = covered_lines - known_coverage
     if new_lines:
         known_coverage.update(new_lines)
@@ -715,14 +709,13 @@ def fuzz_iteration(
     if is_new_signature or is_new_coverage:
         if is_new_signature:
             interesting_outputs.add(execution_signature)
-        # known_coverage уже обновлён выше (сразу после run_target), здесь
-        # используем is_new_coverage только как флаг "интересности"
+
 
         productive_hits[selected_seed] += 1
 
         input_energy[selected_seed] = min(
-            input_energy[selected_seed] + 1, # Увеличивает energy выбранного seed на 1
-            10 # Не дает energy стать больше 10
+            input_energy[selected_seed] + 1,
+            10 
         )
 
         prune_corpus(corpus_directory, input_files, input_energy, input_hits, productive_hits, max_corpus)
