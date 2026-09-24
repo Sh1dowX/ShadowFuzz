@@ -128,4 +128,5 @@ Only test software that you own or are authorized to assess.
 
 ## License
 
-License information is available in the LICENSE file.
+This project is licensed under the MIT License.
+See the [LICENSE](LICENSE) file for details.
